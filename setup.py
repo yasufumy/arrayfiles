@@ -6,7 +6,7 @@ except ImportError:
 
 
 setup(
-    name='textfile',
+    name='easyfile',
     version='0.0.1',
     description='Random Accessible Text file handler',
     long_description=open('./README.md', encoding='utf-8').read(),
@@ -15,7 +15,7 @@ setup(
     author='Yasufumi Taniguchi',
     author_email='yasufumi.taniguchi@gmail.com',
     packages=[
-        'textfile'
+        'easyfile'
     ],
     license='MIT',
     classifiers=[
