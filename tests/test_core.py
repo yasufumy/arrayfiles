@@ -18,7 +18,7 @@ class TextTestCase(TestCase):
     def tearDown(self):
         self.fp.close()
 
-    def test_init(self):
+    def test_dunder_init(self):
         text = easyfile.TextFile(self.fp.name)
         self.assertEqual(text._path, self.fp.name)
         self.assertEqual(text._encoding, 'utf-8')
@@ -49,9 +49,21 @@ class TextTestCase(TestCase):
         with self.assertRaises(IndexError):
             text[-self.length-1]
 
-    def test_len(self):
+    def test_dunder_len(self):
         text = easyfile.TextFile(self.fp.name)
         self.assertEqual(len(text), self.length)
+
+    def test_dunder_getstate(self):
+        text = easyfile.TextFile(self.fp.name)
+        state = text.__getstate__()
+        self.assertNotIn('_mm', state)
+
+    def test_dunder_setstate(self):
+        text = easyfile.TextFile(self.fp.name)
+        state = text.__getstate__()
+        self.assertNotIn('_mm', state)
+        text.__setstate__(state)
+        self.assertIn('_mm', text.__dict__)
 
 
 class CsvTestCase(TestCase):
@@ -70,7 +82,7 @@ class CsvTestCase(TestCase):
     def tearDown(self):
         self.fp.close()
 
-    def test_init(self):
+    def test_dunder_init(self):
         data = easyfile.CsvFile(self.fp.name)
         self.assertEqual(data._path, self.fp.name)
         self.assertEqual(data._encoding, 'utf-8')
