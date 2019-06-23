@@ -1,10 +1,12 @@
-# easyfile: File Access for Humans
+# Easyfile: File Access for Humans
+[![Build Status](https://travis-ci.org/yasufumy/easyfile.svg?branch=master)](https://travis-ci.org/yasufumy/easyfile)
+[![codecov](https://codecov.io/gh/yasufumy/easyfile/branch/master/graph/badge.svg)](https://codecov.io/gh/yasufumy/easyfile)
 
-easyfile allows you to access an arbitrary line of a text file.
+Easyfile allows you to access an arbitrary line of a text file.
 
 ## Installation
 
-To install easyfile, simply:
+To install Easyfile:
 
 ```bash
 pip install easyfile
