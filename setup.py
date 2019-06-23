@@ -7,8 +7,8 @@ except ImportError:
 
 setup(
     name='easyfile',
-    version='0.0.1',
-    description='Random Accessible Text file handler',
+    setup_requires=['setuptools_scm'],
+    description='Python File Access for Humans',
     long_description=open('./README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/yasufumy/textfile',
