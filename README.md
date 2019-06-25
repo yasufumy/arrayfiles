@@ -1,4 +1,4 @@
-# Easyfile: File Access for Humans
+# Easyfile: Random File Access for Humans
 [![Build Status](https://travis-ci.org/yasufumy/easyfile.svg?branch=master)](https://travis-ci.org/yasufumy/easyfile)
 [![codecov](https://codecov.io/gh/yasufumy/easyfile/branch/master/graph/badge.svg)](https://codecov.io/gh/yasufumy/easyfile)
 
