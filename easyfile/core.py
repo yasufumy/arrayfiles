@@ -1,6 +1,5 @@
 from typing import Union, Iterator, List, Dict, Any
 import os
-import os.path as osp
 import io
 import mmap
 import csv
@@ -10,7 +9,7 @@ from easyfile import utils
 
 class TextFile:
     def __init__(self, path: str, encoding: str = 'utf-8') -> None:
-        assert osp.exists(path)
+        assert os.path.exists(path)
 
         self._path = path
         self._encoding = encoding
@@ -30,11 +29,11 @@ class TextFile:
         self._ready = True
 
     def __iter__(self) -> Iterator[str]:
-        with io.open(self._path, encoding=self._encoding) as f:
-            for line in f:
+        with io.open(self._path, encoding=self._encoding) as fp:
+            for line in fp:
                 yield line.rstrip(os.linesep)
 
-    def __getitem__(self, index: Union[int, slice]) -> str:
+    def __getitem__(self, index: Union[int, slice]) -> Union[str, List[str]]:
         self._prepare_reading()
         if isinstance(index, slice):
             start, stop, step = index.indices(self._length)
@@ -97,14 +96,14 @@ class CsvFile(TextFile):
             self._length -= 1
 
     def __iter__(self) -> Iterator[Union[List[Any], Dict[str, Any]]]:
-        with open(self._path, encoding=self._encoding) as f:
+        with io.open(self._path, encoding=self._encoding) as fp:
             if self._header:
-                f.readline()
-                yield from self._reader(f, delimiter=self._delimiter, fieldnames=self._filednames)
+                fp.readline()
+                yield from self._reader(fp, delimiter=self._delimiter, fieldnames=self._filednames)
             else:
-                yield from self._reader(f, delimiter=self._delimiter)
+                yield from self._reader(fp, delimiter=self._delimiter)
 
-    def __getitem__(self, index: Union[int, slice]) -> Union[str, List[str]]:
+    def __getitem__(self, index: Union[int, slice]) -> Union[List[Any], Dict[str, Any]]:
         x = super().__getitem__(index)
         if not isinstance(x, list):
             x = [x]
