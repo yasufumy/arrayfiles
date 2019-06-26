@@ -8,10 +8,10 @@ except ImportError:
 setup(
     name='easyfile',
     setup_requires=['setuptools_scm'],
-    description='Python File Access for Humans',
+    description='Python Random File Access for Humans',
     long_description=open('./README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/yasufumy/textfile',
+    url='https://github.com/yasufumy/easyfile',
     author='Yasufumi Taniguchi',
     author_email='yasufumi.taniguchi@gmail.com',
     packages=[
