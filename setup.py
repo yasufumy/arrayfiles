@@ -7,6 +7,7 @@ except ImportError:
 
 setup(
     name='easyfile',
+    use_scm_version=True,
     setup_requires=['setuptools_scm'],
     description='Python Random File Access for Humans',
     long_description=open('./README.md', encoding='utf-8').read(),
