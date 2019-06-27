@@ -17,10 +17,9 @@ pip install easyfile
 ```py
 import easyfile
 
-data = easyfile.TextFile('/path/to/your/text')
+data = easyfile.TextFile('/path/to/text')
 
-# It supports these methods below
-data[0] # positive index access
-data[-1] # negative index access
-data[0:-1] # slicing
+data[0] # Access the first line of your text
+data[-1] # Access the last line of your text
+data[10:100] # Access the 10th line to the 100 the line of your text
 ```
