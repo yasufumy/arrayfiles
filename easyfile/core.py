@@ -3,6 +3,7 @@ import os
 import io
 import mmap
 import csv
+import functools
 
 from easyfile import utils
 
@@ -94,17 +95,19 @@ class CsvFile(TextFile):
                  path: str,
                  encoding: str = 'utf-8',
                  delimiter: str = ',',
-                 header: bool = False) -> None:
+                 header: bool = False,
+                 fieldnames: List[str] = None) -> None:
         super().__init__(path, encoding)
 
         self._delimiter = delimiter
-        self._reader = csv.DictReader if header else csv.reader
         self._header = header
         if header:
-            with io.open(path, encoding=encoding) as fp:
-                self._filednames = next(csv.reader(fp, delimiter=delimiter))
+            if fieldnames is None:
+                with io.open(path, encoding=encoding) as fp:
+                    fieldnames = next(csv.reader(fp, delimiter=delimiter))
+            self._reader = functools.partial(csv.DictReader, delimiter=delimiter, fieldnames=fieldnames)
         else:
-            self._filednames = None
+            self._reader = functools.partial(csv.reader, delimiter=delimiter)
 
     def _prepare_reading(self) -> None:
         if self._ready:
@@ -118,19 +121,13 @@ class CsvFile(TextFile):
         with io.open(self._path, encoding=self._encoding) as fp:
             if self._header:
                 fp.readline()
-                yield from self._reader(fp, delimiter=self._delimiter, fieldnames=self._filednames)
-            else:
-                yield from self._reader(fp, delimiter=self._delimiter)
+            yield from self._reader(fp)
 
     def __getitem__(self, index: Union[int, slice]) -> Union[List[Any], Dict[str, Any]]:
         x = super().__getitem__(index)
         if not isinstance(x, list):
             x = [x]
-        if self._header:
-            row = self._reader(x, delimiter=self._delimiter, fieldnames=self._filednames)
-        else:
-            row = self._reader(x, delimiter=self._delimiter)
-        row = list(row)
+        row = list(self._reader(x))
         if len(row) == 1:
             return row[0]
         return row
