@@ -8,6 +8,13 @@ from easyfile import utils
 
 
 class TextFile:
+    """Load a line-oriented text file.
+
+    Args:
+        path (str): The path to the text file.
+        encoding (str, optional): The name of the encoding used to decode.
+    """
+
     def __init__(self, path: str, encoding: str = 'utf-8') -> None:
         assert os.path.exists(path)
 
@@ -74,6 +81,15 @@ class TextFile:
 
 
 class CsvFile(TextFile):
+    """Load a CSV file.
+
+    Args:
+        path (str): The path to the text file.
+        encoding (str, optional): The name of the encoding used to decode.
+        delimiter (str, optional): A one-character string used to separate fields. It defaults to ','.
+        header (bool, optional): If ``True``, the csvfile will use the first line of the file as a header.
+    """
+
     def __init__(self,
                  path: str,
                  encoding: str = 'utf-8',
