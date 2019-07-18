@@ -4,7 +4,7 @@
 
 Easyfile allows you to access an arbitrary line of a text file.
 
-If you'd like to use Easyfile for Machine Learning, especially Deep Learning, please check [Lineflow](https://github.com/yasufumy/lineflow).
+If your interest is in using Easyfile for Deep Learning, please check [Lineflow](https://github.com/yasufumy/lineflow).
 
 ## Installation
 
