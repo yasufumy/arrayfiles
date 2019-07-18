@@ -100,14 +100,17 @@ class CsvFile(TextFile):
         self._delimiter = delimiter
         self._reader = csv.DictReader if header else csv.reader
         self._header = header
-        self._filednames = None
+        if header:
+            with io.open(path, encoding=encoding) as fp:
+                self._filednames = next(csv.reader(fp, delimiter=delimiter))
+        else:
+            self._filednames = None
 
     def _prepare_reading(self) -> None:
         if self._ready:
             return
         super()._prepare_reading()
         if self._header:
-            self._filednames = next(csv.reader([self.getline(0)], delimiter=self._delimiter))
             self._offsets.pop(0)
             self._length -= 1
 
