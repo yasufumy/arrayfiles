@@ -17,9 +17,10 @@ class TextFile:
     """
 
     def __init__(self, path: str, encoding: str = 'utf-8') -> None:
+        path = os.path.expanduser(path)
         assert os.path.exists(path)
 
-        self._path = os.path.expanduser(path)
+        self._path = path
         self._encoding = encoding
         self._ready = False
         self._length = None
