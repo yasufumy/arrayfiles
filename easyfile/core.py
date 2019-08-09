@@ -42,6 +42,17 @@ class TextFile:
             for line in fp:
                 yield line.rstrip(os.linesep)
 
+    def iterate(self, start: int, end: int) -> Iterator[str]:
+        self._prepare_reading()
+        if start > end:
+            raise ValueError('end should be larger than start.')
+        self._mm.seek(self._offsets[start])
+        readline = self._mm.readline
+        tell = self._mm.tell
+        end = self._offsets[end] if end < len(self._offsets) else self._offsets[-1]
+        while tell() != end:
+            yield readline().decode(self._encoding).rstrip(os.linesep)
+
     def __getitem__(self, index: Union[int, slice]) -> Union[str, List[str]]:
         self._prepare_reading()
         if isinstance(index, slice):
