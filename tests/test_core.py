@@ -42,6 +42,20 @@ class TextTestCase(TestCase):
         text = easyfile.TextFile(self.fp.name)
         self.assertSequenceEqual(text[:self.length], text)
 
+    def test_iterates(self):
+        text = easyfile.TextFile(self.fp.name)
+        with self.assertRaises(ValueError):
+            next(text.iterate(self.length, 0))
+
+    def test_raise_value_error_with_invalid_span(self):
+        text = easyfile.TextFile(self.fp.name)
+        step = 10
+        for start in range(0, self.length, step):
+            end = start + step
+            with self.subTest(start=start, end=end):
+                for i, line in zip(range(start, end), text.iterate(start, end)):
+                    self.assertEqual(line, f'line #{i}')
+
     def test_raises_index_error_with_invalid_index(self):
         text = easyfile.TextFile(self.fp.name)
         with self.assertRaises(IndexError):
