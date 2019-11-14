@@ -1,4 +1,4 @@
-name: Flake8 and pytest
+name: Run CI build
 
 on: [push]
 
