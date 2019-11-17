@@ -14,5 +14,5 @@ class UtilsTestCase(TestCase):
         self.fp.close()
 
     def test_open(self):
-        with utils.open(self.fp.name, os.O_RDWR) as fd:
+        with utils.fd_open(self.fp.name, os.O_RDWR) as fd:
             self.assertIsInstance(fd, int)

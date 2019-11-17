@@ -30,7 +30,7 @@ class TextFile:
     def _prepare_reading(self) -> None:
         if self._ready:
             return
-        with utils.open(self._path, os.O_RDWR) as fd:
+        with utils.fd_open(self._path, os.O_RDWR) as fd:
             mm = mmap.mmap(fd, 0, access=mmap.ACCESS_READ)
         self._offsets = [0] + [mm.tell() for _ in iter(mm.readline, b'')]
         self._mm = mm
@@ -85,7 +85,7 @@ class TextFile:
 
     def __setstate__(self, state: Dict[str, Any]) -> None:
         self.__dict__.update(state)
-        with utils.open(self._path, os.O_RDWR) as fd:
+        with utils.fd_open(self._path, os.O_RDWR) as fd:
             self._mm = mmap.mmap(fd, 0, access=mmap.ACCESS_READ)
 
     def __del__(self) -> None:
