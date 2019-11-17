@@ -58,10 +58,14 @@ class TextTestCase(TestCase):
 
     def test_raises_index_error_with_invalid_index(self):
         text = easyfile.TextFile(self.fp.name)
+
+        def getitem(i):
+            return text[i]
+
         with self.assertRaises(IndexError):
-            text[self.length]
+            getitem(self.length)
         with self.assertRaises(IndexError):
-            text[-self.length-1]
+            getitem(-self.length-1)
 
     def test_dunder_len(self):
         text = easyfile.TextFile(self.fp.name)
