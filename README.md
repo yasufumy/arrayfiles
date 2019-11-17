@@ -1,5 +1,5 @@
 # Easyfile: Random File Access for Humans
-[![Build Status](https://travis-ci.org/yasufumy/easyfile.svg?branch=master)](https://travis-ci.org/yasufumy/easyfile)
+[![Build Status](https://travis-ci.com/yasufumy/easyfile.svg?branch=master)](https://travis-ci.com/yasufumy/easyfile)
 [![Build Status](https://github.com/yasufumy/easyfile/workflows/Run%20CI%20build/badge.svg)](https://github.com/yasufumy/easyfile/actions?query=workflow%3A%22Run+CI+build%22)
 [![codecov](https://codecov.io/gh/yasufumy/easyfile/branch/master/graph/badge.svg)](https://codecov.io/gh/yasufumy/easyfile)
 
