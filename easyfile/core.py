@@ -1,4 +1,4 @@
-from typing import Union, Iterator, List, Dict, Any
+from typing import Union, Iterator, List, Dict, Any, Optional
 import os
 import io
 import mmap
@@ -16,26 +16,32 @@ class TextFile:
         encoding (str, optional): The name of the encoding used to decode.
     """
 
-    def __init__(self, path: str, encoding: str = 'utf-8') -> None:
+    def __init__(self, path: str, encoding: Optional[str] = 'utf-8') -> None:
         path = os.path.expanduser(path)
         assert os.path.exists(path)
 
         self._path = path
         self._encoding = encoding
-        self._ready = False
-        self._length = None
-        self._offsets = None
-        self._mm = None
+        with utils.fd_open(path, os.O_RDWR) as fd:
+            self._mm = mmap.mmap(fd, 0, access=mmap.ACCESS_READ)
 
-    def _prepare_reading(self) -> None:
-        if self._ready:
-            return
-        with utils.fd_open(self._path, os.O_RDWR) as fd:
-            mm = mmap.mmap(fd, 0, access=mmap.ACCESS_READ)
-        self._offsets = [0] + [mm.tell() for _ in iter(mm.readline, b'')]
-        self._mm = mm
-        self._length = len(self._offsets) - 1
-        self._ready = True
+    def _get_offsets(self) -> List[int]:
+        mm = self._mm
+        mm.seek(0)
+        return [0] + [mm.tell() for _ in iter(mm.readline, b'')][:-1]
+
+    @property
+    @functools.lru_cache()
+    def _offsets(self) -> List[int]:
+        return self._get_offsets()
+
+    def _get_length(self) -> int:
+        return len(self._offsets)
+
+    @property
+    @functools.lru_cache()
+    def _length(self) -> int:
+        return self._get_length()
 
     def __iter__(self) -> Iterator[str]:
         with io.open(self._path, encoding=self._encoding) as fp:
@@ -43,7 +49,6 @@ class TextFile:
                 yield line.rstrip(os.linesep)
 
     def iterate(self, start: int, end: int) -> Iterator[str]:
-        self._prepare_reading()
         if start > end:
             raise ValueError('end should be larger than start.')
         self._mm.seek(self._offsets[start])
@@ -54,7 +59,6 @@ class TextFile:
             yield readline().decode(self._encoding).rstrip(os.linesep)
 
     def __getitem__(self, index: Union[int, slice]) -> Union[str, List[str]]:
-        self._prepare_reading()
         if isinstance(index, slice):
             start, stop, step = index.indices(self._length)
             return [self.getline(i) for i in range(start, stop, step)]
@@ -74,11 +78,9 @@ class TextFile:
         return self._mm.readline().decode(self._encoding).rstrip(os.linesep)
 
     def __len__(self) -> int:
-        self._prepare_reading()
         return self._length
 
     def __getstate__(self) -> Dict[str, Any]:
-        self._prepare_reading()
         state = self.__dict__.copy()
         del state['_mm']
         return state
@@ -89,8 +91,7 @@ class TextFile:
             self._mm = mmap.mmap(fd, 0, access=mmap.ACCESS_READ)
 
     def __del__(self) -> None:
-        if self._mm is not None:
-            self._mm.close()
+        self._mm.close()
 
 
 class CsvFile(TextFile):
@@ -105,10 +106,10 @@ class CsvFile(TextFile):
 
     def __init__(self,
                  path: str,
-                 encoding: str = 'utf-8',
-                 delimiter: str = ',',
-                 header: bool = False,
-                 fieldnames: List[str] = None) -> None:
+                 encoding: Optional[str] = 'utf-8',
+                 delimiter: Optional[str] = ',',
+                 header: Optional[bool] = False,
+                 fieldnames: Optional[List[str]] = None) -> None:
         super().__init__(path, encoding)
 
         self._delimiter = delimiter
@@ -117,17 +118,17 @@ class CsvFile(TextFile):
             if fieldnames is None:
                 with io.open(path, encoding=encoding) as fp:
                     fieldnames = next(csv.reader(fp, delimiter=delimiter))
+            # TODO: csv.DictReader skips blank lines.
+            # So the item length doesn't match if the given file includes black lines.
             self._reader = functools.partial(csv.DictReader, delimiter=delimiter, fieldnames=fieldnames)
         else:
             self._reader = functools.partial(csv.reader, delimiter=delimiter)
 
-    def _prepare_reading(self) -> None:
-        if self._ready:
-            return
-        super()._prepare_reading()
+    def _get_offsets(self) -> List[int]:
+        offsets = super(CsvFile, self)._get_offsets()
         if self._header:
-            self._offsets.pop(0)
-            self._length -= 1
+            offsets.pop(0)
+        return offsets
 
     def __iter__(self) -> Iterator[Union[List[Any], Dict[str, Any]]]:
         with io.open(self._path, encoding=self._encoding) as fp:
