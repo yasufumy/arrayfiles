@@ -66,6 +66,8 @@ class TextTestCase(TestCase):
     def test_dunder_len(self):
         text = easyfile.TextFile(self.fp.name)
         self.assertEqual(len(text), self.length)
+        self.assertEqual(len(text[:None]), self.length)
+        self.assertEqual(len(list(text)), self.length)
 
     def test_dunder_getstate(self):
         text = easyfile.TextFile(self.fp.name)
@@ -128,3 +130,30 @@ class CsvTestCase(TestCase):
         self.assertSequenceEqual(data, expected)
         for x, y in zip(data, expected):
             self.assertEqual(x, y)
+
+
+class CustomNewlineTextTestCase(TestCase):
+
+    def setUp(self):
+        self.length = 100
+
+        fp = tempfile.NamedTemporaryFile()
+        for i in range(self.length):
+            fp.write(f'line #{i}\n\n'.encode('utf-8'))
+        fp.seek(0)
+        self.fp = fp
+        self.newline = '\n\n'
+
+    def tearDown(self):
+        self.fp.close()
+
+    def test_dunder_len(self):
+        text = easyfile.CustomNewlineTextFile(self.fp.name, self.newline)
+        self.assertEqual(len(text), self.length)
+        self.assertEqual(len(text[:None]), self.length)
+        self.assertEqual(len(list(text)), self.length)
+
+    def test_iterates_each_line(self):
+        text = easyfile.CustomNewlineTextFile(self.fp.name, self.newline)
+        for i, (x, y) in enumerate(zip(text, text[:None])):
+            self.assertEqual(x, f'line #{i}')
