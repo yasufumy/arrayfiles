@@ -156,4 +156,4 @@ class CustomNewlineTextTestCase(TestCase):
     def test_iterates_each_line(self):
         text = easyfile.CustomNewlineTextFile(self.fp.name, self.newline)
         for i, (x, y) in enumerate(zip(text, text[:None])):
-            self.assertEqual(x, f'line #{i}')
+            self.assertEqual(x, y, f'line #{i}')
