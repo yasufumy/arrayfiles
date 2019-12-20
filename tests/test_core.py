@@ -22,10 +22,6 @@ class TextTestCase(TestCase):
         text = easyfile.TextFile(self.fp.name)
         self.assertEqual(text._path, self.fp.name)
         self.assertEqual(text._encoding, 'utf-8')
-        self.assertFalse(text._ready)
-        self.assertIsNone(text._length)
-        self.assertIsNone(text._offsets)
-        self.assertIsNone(text._mm)
 
     def test_supports_random_access(self):
         text = easyfile.TextFile(self.fp.name)
@@ -104,10 +100,6 @@ class CsvTestCase(TestCase):
         data = easyfile.CsvFile(self.fp.name)
         self.assertEqual(data._path, self.fp.name)
         self.assertEqual(data._encoding, 'utf-8')
-        self.assertFalse(data._ready)
-        self.assertIsNone(data._length)
-        self.assertIsNone(data._offsets)
-        self.assertIsNone(data._mm)
         self.assertEqual(data._delimiter, ',')
         self.assertFalse(data._header)
 
@@ -118,22 +110,20 @@ class CsvTestCase(TestCase):
     def test_loads_csv_with_header(self):
         data = easyfile.CsvFile(self.fp.name, header=True)
         self.assertTrue(data._header)
-        data._prepare_reading()
 
     def test_iterates_csv_with_header(self):
         from collections import OrderedDict
 
         data = easyfile.CsvFile(self.fp.name, header=True)
-        data._prepare_reading()
         header = self.lines[0].split(',')
         expected = [OrderedDict(zip(header, line.split(',')))
                     for line in self.lines[1:]]
-        for x, y in zip(data, expected):
+        for i, (x, y) in enumerate(zip(data, expected)):
             self.assertEqual(x, y)
+            self.assertEqual(data[i], y)
 
     def test_iterates_csv_without_header(self):
         data = easyfile.CsvFile(self.fp.name, header=False)
-        data._prepare_reading()
         expected = [line.split(',') for line in self.lines]
         self.assertSequenceEqual(data, expected)
         for x, y in zip(data, expected):
