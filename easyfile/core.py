@@ -28,7 +28,7 @@ class TextFile:
     def _get_offsets(self) -> List[int]:
         mm = self._mm
         mm.seek(0)
-        return [0] + [mm.tell() for _ in iter(mm.readline, b'')][:-1]
+        return [0] + [mm.tell() for _ in iter(mm.readline, b'')]
 
     @property
     @functools.lru_cache()
@@ -36,7 +36,7 @@ class TextFile:
         return self._get_offsets()
 
     def _get_length(self) -> int:
-        return len(self._offsets)
+        return len(self._offsets) - 1
 
     @property
     @functools.lru_cache()
@@ -74,8 +74,8 @@ class TextFile:
         return self.getline(index)
 
     def getline(self, i: int) -> str:
-        self._mm.seek(self._offsets[i])
-        return self._mm.readline().decode(self._encoding).rstrip(os.linesep)
+        start, end = self._offsets[i: i + 2]
+        return self._mm[start: end].decode(self._encoding).rstrip(os.linesep)
 
     def __len__(self) -> int:
         return self._length
@@ -91,7 +91,8 @@ class TextFile:
             self._mm = mmap.mmap(fd, 0, access=mmap.ACCESS_READ)
 
     def __del__(self) -> None:
-        self._mm.close()
+        if getattr(self, '_mm', None):
+            self._mm.close()
 
 
 class CsvFile(TextFile):
@@ -144,3 +145,39 @@ class CsvFile(TextFile):
         if len(row) == 1:
             return row[0]
         return row
+
+
+class CustomNewlineTextFile(TextFile):
+    """Load a line-oriented text file with custom newline letters.
+
+    Args:
+        path (str): The path to the text file.
+        newline (str): The newline letters.
+        encoding (str, optional): The name of the encoding used to decode.
+    """
+
+    def __init__(self, path: str, newline: str, encoding: Optional[str] = 'utf-8') -> None:
+        super(CustomNewlineTextFile, self).__init__(path, encoding)
+
+        self._newline = newline.encode(encoding)
+
+    def _get_offsets(self) -> List[int]:
+        mm = self._mm
+        mm.seek(0)
+
+        offsets = [0]
+        start = 0
+        newline = self._newline
+        newline_offset = len(newline)
+        while True:
+            temp = mm.find(newline, start)
+            if temp == -1:
+                break
+            start = temp + newline_offset
+            offsets.append(start)
+        return offsets
+
+    def __iter__(self) -> Iterator[str]:
+        mm = self._mm
+        for start, end in zip(self._offsets, self._offsets[1:]):
+            yield mm[start: end].decode(self._encoding).rstrip(os.linesep)
