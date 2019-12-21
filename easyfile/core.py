@@ -181,3 +181,80 @@ class CustomNewlineTextFile(TextFile):
         mm = self._mm
         for start, end in zip(self._offsets, self._offsets[1:]):
             yield mm[start: end].decode(self._encoding).rstrip(os.linesep)
+
+
+def read_text(
+    path: str,
+    encoding: Optional[str] = 'utf-8',
+    newline: Optional[str] = '\n',
+    lazy: Optional[bool] = True
+) -> Union[TextFile, CustomNewlineTextFile, List[str]]:
+    """Load a line-oriented text file.
+
+    Args:
+        path (str): The path to the text file.
+        encoding (str, optional): The name of the encoding used to decode.
+        newline (str, optional): The newline letters.
+        lazy (bool, optional): If ``True``, the function returns ``TextFile`` or
+        ``CustomNewlineTextFile`` object. Otherwise, returns a list of string.
+
+    Returns (Union[TextFile, CustomNewlineTextFile, List[str]]):
+        The loaded array-like accessible text file.
+
+    Examples:
+        >>> import easyfile
+        >>> text = easyfile.read_text('/path/to/your/text')
+        >>> print(text[0])
+        The 1st line in your text will be displayed.
+        >>> print(text[10:20])
+        The 10th to 20th lines in your text will be displayed.
+    """
+
+    if newline == '\n':
+        data = TextFile(path, encoding)
+    else:
+        data = CustomNewlineTextFile(path, newline, encoding)
+
+    if lazy:
+        return data
+    else:
+        return list(data)
+
+
+def read_csv(
+    path: str,
+    encoding: Optional[str] = 'utf-8',
+    delimiter: Optional[str] = ',',
+    header: Optional[bool] = False,
+    fieldnames: Optional[List[str]] = None,
+    lazy: Optional[str] = True
+) -> Union[CsvFile, List[str]]:
+    """Load a CSV file.
+
+    Args:
+        path (str): The path to the text file.
+        encoding (str, optional): The name of the encoding used to decode.
+        delimiter (str, optional): A one-character string used to separate fields. It defaults to ','.
+        header (bool, optional): If ``True``, this method will use the first line of the file as a header.
+        fieldnames (list, optional): custom header.
+        lazy (bool, optional): If ``True``, the function returns ``TextFile`` or
+        ``CustomNewlineTextFile`` object. Otherwise, returns a list of string.
+
+    Returns (Union[CsvFile, List[str]]):
+        The loaded array-like accessible csv file.
+
+    Examples:
+        >>> import easyfile
+        >>> text = easyfile.read_csv('/path/to/your/tsv', delimiter='\t')
+        >>> print(text[0])
+        ['the', 'first', 'row']
+        >>> print(text[10:12])
+        [['the', '10th', 'row'], ['the', '12th', 'row']]
+    """
+
+    data = CsvFile(path, encoding, delimiter, header, fieldnames)
+
+    if lazy:
+        return data
+    else:
+        return list(data)
