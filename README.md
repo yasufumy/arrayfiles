@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/yasufumy/arrayfiles/workflows/Run%20CI%20build/badge.svg)](https://github.com/yasufumy/arrayfiles/actions?query=workflow%3A%22Run+CI+build%22)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/yasufumy/arrayfiles.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/yasufumy/arrayfiles/context:python)
  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2de6c7b86da743a7ba1a567d29213dca)](https://www.codacy.com/manual/yasufumy/arrayfiles?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=yasufumy/arrayfiles&amp;utm_campaign=Badge_Grade)
- [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/b2c2289a10fd4f2284f436c961e81258)](https://www.codacy.com/manual/yasufumy/arrayfiles?utm_source=github.com&utm_medium=referral&utm_content=yasufumy/arrayfiles&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/2de6c7b86da743a7ba1a567d29213dca)](https://www.codacy.com/manual/yasufumy/arrayfiles?utm_source=github.com&utm_medium=referral&utm_content=yasufumy/arrayfiles&utm_campaign=Badge_Coverage)
 [![codecov](https://codecov.io/gh/yasufumy/arrayfiles/branch/master/graph/badge.svg)](https://codecov.io/gh/yasufumy/arrayfiles)
 
 ArrayFiles allows you to access an arbitrary line of a text file.
