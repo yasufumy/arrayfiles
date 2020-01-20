@@ -5,7 +5,7 @@ import mmap
 import csv
 import functools
 
-from easyfile import utils
+from arrayfiles import utils
 
 
 class TextFile:
@@ -202,8 +202,8 @@ def read_text(
         The loaded array-like accessible text file.
 
     Examples:
-        >>> import easyfile
-        >>> text = easyfile.read_text('/path/to/your/text')
+        >>> import arrayfiles
+        >>> text = arrayfiles.read_text('/path/to/your/text')
         >>> print(text[0])
         The 1st line in your text will be displayed.
         >>> print(text[10:20])
@@ -244,8 +244,8 @@ def read_csv(
         The loaded array-like accessible csv file.
 
     Examples:
-        >>> import easyfile
-        >>> text = easyfile.read_csv('/path/to/your/tsv', delimiter='\t')
+        >>> import arrayfiles
+        >>> text = arrayfiles.read_csv('/path/to/your/tsv', delimiter='\t')
         >>> print(text[0])
         ['the', 'first', 'row']
         >>> print(text[10:12])

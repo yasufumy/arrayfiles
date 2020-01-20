@@ -6,17 +6,17 @@ except ImportError:
 
 
 setup(
-    name='easyfile',
+    name='arrayfiles',
     use_scm_version=True,
     setup_requires=['setuptools_scm'],
-    description='Python Random File Access for Humans',
+    description='Array-like File Access in Python',
     long_description=open('./README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/yasufumy/easyfile',
+    url='https://github.com/yasufumy/arrayfiles',
     author='Yasufumi Taniguchi',
     author_email='yasufumi.taniguchi@gmail.com',
     packages=[
-        'easyfile'
+        'arrayfiles'
     ],
     license='MIT',
     classifiers=[
