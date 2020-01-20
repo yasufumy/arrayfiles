@@ -2,7 +2,7 @@ from unittest import TestCase
 import tempfile
 import os
 
-from easyfile import utils
+from arrayfiles import utils
 
 
 class UtilsTestCase(TestCase):
