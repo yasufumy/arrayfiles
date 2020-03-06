@@ -1,6 +1,6 @@
-from unittest import TestCase
-import tempfile
 import os
+import tempfile
+from unittest import TestCase
 
 from arrayfiles import utils
 

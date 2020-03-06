@@ -1,5 +1,5 @@
-from unittest import TestCase
 import tempfile
+from unittest import TestCase
 
 import arrayfiles
 

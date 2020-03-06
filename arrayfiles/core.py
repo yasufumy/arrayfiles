@@ -1,9 +1,9 @@
-from typing import Union, Iterator, List, Dict, Any, Optional
-import os
-import io
-import mmap
 import csv
 import functools
+import io
+import mmap
+import os
+from typing import Any, Dict, Iterator, List, Optional, Union
 
 from arrayfiles import utils
 

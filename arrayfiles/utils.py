@@ -1,5 +1,5 @@
-import os
 import contextlib
+import os
 
 
 @contextlib.contextmanager
