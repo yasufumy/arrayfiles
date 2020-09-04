@@ -127,11 +127,11 @@
                 "pipfile"
             ],
             "hashes": [
-                "sha256:819fa99f2a9323025ade768e94b2e27447cd9b0a64595a90f21595e11151b788",
-                "sha256:a4fb5fffc46494cda15e33a996c8e724f8e3db19682b84cc7c990b57f2941e9f"
+                "sha256:0906e0e7092e060c05de709ad172e1ec1b26aa27fdd4e8093f257890cd881d18",
+                "sha256:8103bc070d9258fe97e82470cb30f0e4b730e94c44ac81ebae32b05d5a6c87ea"
             ],
             "index": "pypi",
-            "version": "==5.4.1"
+            "version": "==5.5.0"
         },
         "jedi": {
             "hashes": [
@@ -271,10 +271,10 @@
         },
         "traitlets": {
             "hashes": [
-                "sha256:70b4c6a1d9019d7b4f6846832288f86998aa3b9207c6821f3578a6a6a467fe44",
-                "sha256:d023ee369ddd2763310e4c3eae1ff649689440d4ae59d7485eb4cfbbe3e359f7"
+                "sha256:8bdadb17a04c844f444cdefaa3dee47a12ff14cf6277b9eeda29bfa0659d5987",
+                "sha256:a2e91709a0330b6c5d497ed470b2feb1ed8da5c9dd807c6daab41f727b9391c9"
             ],
-            "version": "==4.3.3"
+            "version": "==5.0.3"
         },
         "wcwidth": {
             "hashes": [
